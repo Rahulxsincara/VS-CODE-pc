@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telugu Pronouns Quiz</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin-top: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #2575fc;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .description {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+        
+        .progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #4CAF50;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .question-container {
+            margin-bottom: 30px;
+        }
+        
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+            padding: 15px;
+            background-color: #f5f9ff;
+            border-radius: 10px;
+            border-left: 5px solid #2575fc;
+        }
+        
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .option {
+            padding: 15px;
+            background-color: #f0f4ff;
+            border: 2px solid #d0d8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        .option:hover {
+            background-color: #e1e9ff;
+            transform: translateY(-2px);
+        }
+        
+        .option.selected {
+            background-color: #2575fc;
+            color: white;
+            border-color: #1c5dc1;
+        }
+        
+        .option.correct {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #3d8b40;
+        }
+        
+        .option.incorrect {
+            background-color: #f44336;
+            color: white;
+            border-color: #d32f2f;
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        #next-btn {
+            background-color: #2575fc;
+            color: white;
+        }
+        
+        #next-btn:hover {
+            background-color: #1c5dc1;
+            transform: translateY(-2px);
+        }
+        
+        #next-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        #restart-btn {
+            background-color: #ff9800;
+            color: white;
+        }
+        
+        #restart-btn:hover {
+            background-color: #e68900;
+            transform: translateY(-2px);
+        }
+        
+        .score-container {
+            text-align: center;
+            font-size: 1.3rem;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f5f9ff;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .score-value {
+            font-weight: bold;
+            color: #2575fc;
+            font-size: 2rem;
+        }
+        
+        .feedback {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 1.1rem;
+            min-height: 25px;
+            color: #4CAF50;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 600px) {
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .question {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Telugu Pronouns Quiz</h1>
+            <p class="description">Test your knowledge of Telugu pronouns written in Hindi script</p>
+        </header>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <div class="question-container">
+            <div class="question" id="question">Question will appear here</div>
+            <div class="options-container" id="options-container">
+                <!-- Options will be generated by JavaScript -->
+            </div>
+            <div class="feedback" id="feedback"></div>
+        </div>
+        
+        <div class="button-container">
+            <button id="restart-btn">Restart Quiz</button>
+            <button id="next-btn">Next Question</button>
+        </div>
+        
+        <div class="score-container" id="score-container">
+            <h2>Quiz Completed!</h2>
+            <p>Your Score: <span class="score-value" id="score-value">0</span>/<span id="total-questions">0</span></p>
+        </div>
+    </div>
+
+    <script>
+        // All Telugu pronouns data
+        const teluguPronouns = {
+            "personalSubject": [
+                { english: "I", telugu: "नेनु" },
+                { english: "you", telugu: "नीवु" },
+                { english: "he", telugu: "अतडु" },
+                { english: "she", telugu: "आमे" },
+                { english: "it", telugu: "अदि" },
+                { english: "we", telugu: "मनमु" },
+                { english: "they", telugu: "वारु" }
+            ],
+            "personalObject": [
+                { english: "me", telugu: "नन्नु" },
+                { english: "you", telugu: "निन्नु" },
+                { english: "him", telugu: "अतण्णि" },
+                { english: "her", telugu: "आमेनु" },
+                { english: "it", telugu: "दानिनि" },
+                { english: "us", telugu: "मनल्नि" },
+                { english: "them", telugu: "वारिनि" }
+            ],
+            "possessive": [
+                { english: "mine", telugu: "नादि" },
+                { english: "yours", telugu: "नीदि" },
+                { english: "his", telugu: "अतनिदि" },
+                { english: "hers", telugu: "आमेदि" },
+                { english: "its", telugu: "दानिदि" },
+                { english: "ours", telugu: "मनदि" },
+                { english: "theirs", telugu: "वारिदि" }
+            ],
+            "possessiveAdjective": [
+                { english: "my", telugu: "ना" },
+                { english: "your", telugu: "नी" },
+                { english: "his", telugu: "अतनि" },
+                { english: "her", telugu: "आमे" },
+                { english: "its", telugu: "दानि" },
+                { english: "our", telugu: "मना" },
+                { english: "their", telugu: "वारि" }
+            ],
+            "demonstrative": [
+                { english: "this", telugu: "इदि" },
+                { english: "that", telugu: "अदि" },
+                { english: "these", telugu: "इवि" },
+                { english: "those", telugu: "अवि" }
+            ],
+            "interrogative": [
+                { english: "who", telugu: "एवरु" },
+                { english: "whom", telugu: "एवड्नि" },
+                { english: "whose", telugu: "एवरि" },
+                { english: "which", telugu: "एदि" },
+                { english: "what", telugu: "एमिति" }
+            ]
+        };
+
+        // Generate quiz data from all pronoun examples
+        function generateQuizData() {
+            const quizData = [];
+            
+            // Add questions for each pronoun category
+            for (const category in teluguPronouns) {
+                teluguPronouns[category].forEach(pronoun => {
+                    // Create question
+                    const question = `What is the Telugu (in Hindi script) for '${pronoun.english}'?`;
+                    
+                    // Get correct answer
+                    const correctAnswer = pronoun.telugu;
+                    
+                    // Generate wrong options from other pronouns
+                    const wrongOptions = [];
+                    const allPronouns = getAllPronouns();
+                    
+                    // Remove correct answer from all pronouns
+                    const otherPronouns = allPronouns.filter(p => p !== correctAnswer);
+                    
+                    // Shuffle and pick 3 wrong options
+                    shuffleArray(otherPronouns);
+                    for (let i = 0; i < 3; i++) {
+                        wrongOptions.push(otherPronouns[i]);
+                    }
+                    
+                    // Combine correct and wrong options, then shuffle
+                    const options = [correctAnswer, ...wrongOptions];
+                    shuffleArray(options);
+                    
+                    // Find index of correct answer after shuffling
+                    const correctIndex = options.indexOf(correctAnswer);
+                    
+                    // Add to quiz data
+                    quizData.push({
+                        question: question,
+                        options: options,
+                        correct: correctIndex
+                    });
+                });
+            }
+            
+            // Shuffle all questions
+            shuffleArray(quizData);
+            return quizData;
+        }
+
+        // Helper function to get all Telugu pronouns as a flat array
+        function getAllPronouns() {
+            const allPronouns = [];
+            for (const category in teluguPronouns) {
+                teluguPronouns[category].forEach(pronoun => {
+                    allPronouns.push(pronoun.telugu);
+                });
+            }
+            return allPronouns;
+        }
+
+        // Helper function to shuffle array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Generate quiz data
+        const quizData = generateQuizData();
+
+        // DOM elements
+        const questionElement = document.getElementById('question');
+        const optionsContainer = document.getElementById('options-container');
+        const nextButton = document.getElementById('next-btn');
+        const restartButton = document.getElementById('restart-btn');
+        const scoreContainer = document.getElementById('score-container');
+        const scoreValue = document.getElementById('score-value');
+        const totalQuestions = document.getElementById('total-questions');
+        const feedbackElement = document.getElementById('feedback');
+        const progressBar = document.getElementById('progress-bar');
+
+        // Quiz state variables
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let selectedOption = null;
+
+        // Initialize the quiz
+        function initQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            selectedOption = null;
+            scoreContainer.style.display = 'none';
+            nextButton.disabled = true;
+            nextButton.style.display = 'block';
+            loadQuestion();
+        }
+
+        // Load the current question
+        function loadQuestion() {
+            resetOptions();
+            const currentQuestion = quizData[currentQuestionIndex];
+            questionElement.textContent = currentQuestion.question;
+            
+            // Update progress bar
+            const progress = ((currentQuestionIndex + 1) / quizData.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            
+            // Create options
+            currentQuestion.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.classList.add('option');
+                optionElement.textContent = option;
+                optionElement.dataset.index = index;
+                optionElement.addEventListener('click', selectOption);
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            feedbackElement.textContent = '';
+        }
+
+        // Reset option styles
+        function resetOptions() {
+            optionsContainer.innerHTML = '';
+        }
+
+        // Handle option selection
+        function selectOption(e) {
+            if (selectedOption !== null) return; // Prevent changing answer after selection
+            
+            const selectedOptionElement = e.target;
+            selectedOption = parseInt(selectedOptionElement.dataset.index);
+            
+            // Highlight selected option
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+            selectedOptionElement.classList.add('selected');
+            
+            // Enable next button
+            nextButton.disabled = false;
+            
+            // Check if answer is correct
+            const currentQuestion = quizData[currentQuestionIndex];
+            const isCorrect = selectedOption === currentQuestion.correct;
+            
+            if (isCorrect) {
+                selectedOptionElement.classList.add('correct');
+                feedbackElement.textContent = "Correct! Well done!";
+                feedbackElement.style.color = "#4CAF50";
+                score++;
+            } else {
+                selectedOptionElement.classList.add('incorrect');
+                feedbackElement.textContent = "Incorrect. The right answer is: " + currentQuestion.options[currentQuestion.correct];
+                feedbackElement.style.color = "#f44336";
+                
+                // Highlight correct option
+                const correctOption = document.querySelector(`.option[data-index="${currentQuestion.correct}"]`);
+                correctOption.classList.add('correct');
+            }
+        }
+
+        // Move to next question or show results
+        function nextQuestion() {
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex < quizData.length) {
+                selectedOption = null;
+                nextButton.disabled = true;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        // Show final results
+        function showResults() {
+            questionElement.textContent = "Quiz Completed!";
+            optionsContainer.innerHTML = '';
+            nextButton.style.display = 'none';
+            scoreValue.textContent = score;
+            totalQuestions.textContent = quizData.length;
+            scoreContainer.style.display = 'block';
+            progressBar.style.width = '100%';
+        }
+
+        // Event listeners
+        nextButton.addEventListener('click', nextQuestion);
+        restartButton.addEventListener('click', initQuiz);
+
+        // Start the quiz
+        initQuiz();
+    </script>
+</body>
+</html>
